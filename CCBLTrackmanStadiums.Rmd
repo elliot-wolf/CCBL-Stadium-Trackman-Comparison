@@ -1,0 +1,64 @@
+---
+title: "Cotuit vs. Wareham Trackman Comparison"
+author: "Elliot Wolf"
+date: "2024-08-19"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Introduction
+
+During my time with Cotuit, I noticed that most of our pitchers seemed to throw harder when pitching in Wareham compared to our home field. I examined Trackman data to see if our pitchers were actually throwing harder. If there was a clear difference in fastball velocity between Cotuit's Trackman and Wareham's Trackman, I wanted to account for this when creating pitcher reports. This could be done with any Trackman metric or pitches besides fastballs. I focus only on fastball velocity across stadiums because that's what pitchers tend to be most concerned with.
+
+
+```{r include=FALSE}
+
+# Load packages
+library(dplyr)
+library(tukeyedar)
+
+# Import data
+dat <- read.csv("COTvWAR.csv")
+
+
+```
+
+
+
+# Results
+Before observing the Q-Q plot, it's important to note that:
+
+* The results are only reflective upon the population of pitchers who averaged at least 90 MPH on their fastball.
+* We cannot take into account external factors like a pitcher's soreness, mound conditions, etc.
+
+The results in the Q-Q plot below confirm my belief that Wareham's Trackman tends to record higher fastball velocities than Cotuit's Trackman. All 16 pitchers who pitched at both Cotuit and Wareham recorded higher average fastball velocities at Wareham than Cotuit. 
+
+```{r echo=FALSE, fig.height=3.5, fig.width=3.5, message=TRUE, warning=FALSE}
+
+# Q-Q plot
+eda_qq(dat$CCBLCotuit, dat$CCBLWareham,
+       xlab = "Cotuit", ylab = "Wareham", title = "Fastball Velocity")
+
+```
+
+The suggested offsets allow us to better quantify the difference in fastball velocity readings. We'd expect a pitcher who throws 91.0 MPH in Cotuit to throw 91.35 MPH in Wareham. We'd expect a pitcher who throws 93.0 MPH in Cotuit to throw 94.14 in Wareham. The difference between a pitcher's velocity at Cotuit vs. Wareham appears to increase the harder a pitcher throws.
+
+# Conclusion
+
+This is not to say that the Trackman metrics recorded at one stadium are more correct than the other. The purpose of this is not to calculate exactly how hard a pitcher hypothetically would've thrown at one stadium versus another, but rather to make pitchers aware that there is field-by-field variance when it comes to Trackman, and this variance should be accounted for when examining an individual's performance.
+
+# References
+
+R Core Team (2023). _R: A Language and Environment for Statistical Computing_. R Foundation for Statistical
+  Computing, Vienna, Austria. <https://www.R-project.org/>.
+  
+Wickham H, François R, Henry L, Müller K, Vaughan D (2023). _dplyr: A Grammar
+  of Data Manipulation_. R package version 1.1.4,
+  <https://CRAN.R-project.org/package=dplyr>.
+  
+
+
+
